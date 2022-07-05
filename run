@@ -10,6 +10,7 @@ dev() {
 }
 
 setup-dev() {
+    deactivate
     python3 -m venv -h > /dev/null || sudo apt install python3-venv
     rm -rf venv/
     python3 -m venv venv && \

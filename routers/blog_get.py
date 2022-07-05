@@ -1,15 +1,17 @@
 from enum import Enum
 from typing import Optional
 
-from fastapi import APIRouter, Response, status
+from fastapi import APIRouter, Depends, Response, status
+
+from .blog_post import required_functionality
 
 router = APIRouter(tags=["Blog"], prefix="/blog")
 
 
 @router.get("/all", response_description="List of all blogs")
-def all_blogs():
+def all_blogs(req: dict = Depends(required_functionality)):
     """Retrieve all blogs."""
-    return {"message": "All blogs"}
+    return {"message": "All blogs", "req": req}
 
 
 @router.get("/{id}")
