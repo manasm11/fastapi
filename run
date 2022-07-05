@@ -1,0 +1,11 @@
+#!/bin/bash
+
+format() {
+    venv/bin/python -m black .
+}
+
+dev() {
+    venv/bin/python -m uvicorn main:app --reload --port 8000 --host localhost
+}
+
+$@
