@@ -1,12 +1,6 @@
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from enum import Enum
-
-
-class BlogType(str, Enum):
-    travel = "travel"
-    howto = "howto"
-    philosophy = "philosophy"
 
 
 app = FastAPI()
@@ -15,19 +9,28 @@ app = FastAPI()
 @app.get("/hello")
 def test_endpoint():
     """Check if the server is online or not."""
-    return {"message": "API is live"}
+    return {"message": "API is live", "alive": True}
 
 
-@app.get("/blog/all", tags=["Blog"])
+@app.get("/blog/all", tags=["Blog"], response_description="List of all blogs")
 def all_blogs():
     """Retrieve all blogs."""
     return {"message": "All blogs"}
 
 
 @app.get("/blog/{id}", tags=["Blog"])
-def blog_with_id(id: int):
+def blog_with_id(id: int, response: Response):
     """Retrieve a specific blog using id."""
-    return {"message": f"Blog with id {id}"}
+    if id > 5:
+        response.status_code = 404
+        return {"error": f"Blog with ID {id} NOT FOUND"}
+    return {"message": f"Blog with ID {id}"}
+
+
+class BlogType(str, Enum):
+    travel = "travel"
+    howto = "howto"
+    philosophy = "philosophy"
 
 
 @app.get("/blog/type/{type}", tags=["Blog"])
