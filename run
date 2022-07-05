@@ -8,4 +8,11 @@ dev() {
     venv/bin/python -m uvicorn main:app --reload --port 8000 --host localhost
 }
 
+setup-dev() {
+    [ "$EUID" -ne 0 ] && echo "Please run as root user or use sudo." && exit 1
+    apt install python3-venv && \
+    python3 -m venv venv && \
+    venv/bin/python -m pip install -r requirements.txt
+}
+
 $@
