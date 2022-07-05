@@ -1,0 +1,35 @@
+#!/bin/bash
+
+format() {
+    venv/bin/python -m black .
+}
+
+dev() {
+    venv/bin/python -m uvicorn main:app --reload --port 8000 --host localhost
+}
+
+setup-dev() {
+    python3 -m venv -h > /dev/null || sudo apt install python3-venv
+    rm -rf venv/
+    python3 -m venv venv && \
+    venv/bin/python -m pip install -r requirements.txt
+}
+
+push() {
+    format
+    git status --short
+    echo -n "Please confirm the above changes (y/n): "
+    read QUIT
+    [ "${QUIT}" = "y" ] && git commit -a
+    _confirm_previous_command
+    git push origin $(git branch --show-current)
+}
+
+_confirm_previous_command() {
+    if [ $? -ne 0 ]; then
+        echo "Stopping the script..."
+        exit 1
+    fi
+}
+
+$@
