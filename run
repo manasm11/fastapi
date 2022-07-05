@@ -16,6 +16,7 @@ setup-dev() {
 }
 
 push() {
+    format
     git status --short
     echo -n "Please confirm the above changes (y/n): "
     read QUIT
