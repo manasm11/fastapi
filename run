@@ -15,4 +15,20 @@ setup-dev() {
     venv/bin/python -m pip install -r requirements.txt
 }
 
+push() {
+    git status --short
+    echo -n "Please confirm the above changes (y/n): "
+    read QUIT
+    [ "${QUIT}" = "y" ] && git commit -a
+    _confirm_previous_command
+    git push origin $(git branch --show-current)
+}
+
+_confirm_previous_command() {
+    if [ $? -ne 0 ]; then
+        echo "Stopping the script..."
+        exit 1
+    fi
+}
+
 $@
