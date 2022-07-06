@@ -21,14 +21,14 @@ def get_all_users(db: Session):
     return db.query(DbUser).all()
 
 
-def get_one_user(db: Session, user_id: int):
-    user = db.query(DbUser).get(user_id)
+def get_one_user(db: Session, id: int):
+    user = db.query(DbUser).get(id)
     # Handle any exceptions
     return user
 
 
-def update_user(db: Session, request: UserRequest, user_id: int):
-    users = db.query(DbUser).filter(DbUser.id == user_id)
+def update_user(db: Session, request: UserRequest, id: int):
+    users = db.query(DbUser).filter(DbUser.id == id)
     # Handle any exceptions
     users.update(
         {
@@ -43,9 +43,9 @@ def update_user(db: Session, request: UserRequest, user_id: int):
     return user
 
 
-def delete_user(db: Session, user_id: int):
-    user = db.query(DbUser).get(user_id)
+def delete_user(db: Session, id: int):
+    user = db.query(DbUser).get(id)
     # Handle any exceptions
     db.delete(user)
     db.commit()
-    return {"message": f"User with id {user_id} deleted"}
+    return {"message": f"User with id {id} deleted"}
