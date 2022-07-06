@@ -41,6 +41,4 @@ app.add_exception_handler(
 app.add_exception_handler(
     exceptions.UnauthorizedException, exceptions.unauthorized_handler
 )
-app.add_exception_handler(
-    exceptions.ForbiddenException, exceptions.forbidden_handler
-)
+app.add_exception_handler(exceptions.ForbiddenException, exceptions.forbidden_handler)
