@@ -17,9 +17,9 @@ def get_token(
 ):
     user: DbUser = db.query(DbUser).filter(DbUser.username == request.username).first()
     if not user:
-        raise exceptions.UserNotFoundException()
+        raise exceptions.UserNotFound()
     if not Hash.verify(user.password, request.password):
-        raise exceptions.IncorrectPasswordException()
+        raise exceptions.IncorrectPassword()
     access_token = oauth2.create_access_token(data={"kft": user.username})
     return {
         "access_token": access_token,

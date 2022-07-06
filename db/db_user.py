@@ -25,7 +25,7 @@ def get_all_users(db: Session):
 def get_one_user(db: Session, id: int):
     user = db.query(DbUser).get(id)
     if not user:
-        raise exceptions.UserNotFoundException(id)
+        raise exceptions.UserNotFound(id)
     return user
 
 
@@ -33,7 +33,7 @@ def update_user(db: Session, request: UserRequest, id: int):
     users = db.query(DbUser).filter(DbUser.id == id)
     user = users.first()
     if not user:
-        raise exceptions.UserNotFoundException(id)
+        raise exceptions.UserNotFound(id)
     users.update(
         {
             DbUser.email: request.email,
@@ -49,7 +49,7 @@ def update_user(db: Session, request: UserRequest, id: int):
 def delete_user(db: Session, id: int):
     user = db.query(DbUser).get(id)
     if not user:
-        raise exceptions.UserNotFoundException(id)
+        raise exceptions.UserNotFound(id)
     db.delete(user)
     db.commit()
     return {"message": f"User with id {id} deleted"}
@@ -58,5 +58,5 @@ def delete_user(db: Session, id: int):
 def get_user_by_username(db: Session, username: str):
     user = db.query(DbUser).filter(DbUser.username == username).first()
     if not user:
-        raise exceptions.UserNotFoundException(username)
+        raise exceptions.UserNotFound(username)
     return user

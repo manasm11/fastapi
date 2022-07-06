@@ -35,7 +35,7 @@ def get_current_user(
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username = payload.get("kft")
         if not username:
-            raise exceptions.UnauthorizedException()
+            raise exceptions.Unauthorized()
     except JWTError:
-        raise exceptions.UnauthorizedException()
+        raise exceptions.Unauthorized()
     return db_user.get_user_by_username(db, username)

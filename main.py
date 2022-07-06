@@ -29,16 +29,8 @@ def test_endpoint():
 #######################################################
 ###              EXCEPTION HANDLERS                 ###
 #######################################################
-app.add_exception_handler(
-    exceptions.UserNotFoundException, exceptions.user_not_found_handler
-)
-app.add_exception_handler(
-    exceptions.ArticleNotFoundException, exceptions.article_not_found_handler
-)
-app.add_exception_handler(
-    exceptions.IncorrectPasswordException, exceptions.incorrect_password_handler
-)
-app.add_exception_handler(
-    exceptions.UnauthorizedException, exceptions.unauthorized_handler
-)
-app.add_exception_handler(exceptions.ForbiddenException, exceptions.forbidden_handler)
+app.add_exception_handler(exceptions.UserNotFound, exceptions.user_not_found)
+app.add_exception_handler(exceptions.ArticleNotFound, exceptions.article_not_found)
+app.add_exception_handler(exceptions.IncorrectPassword, exceptions.incorrect_password)
+app.add_exception_handler(exceptions.Unauthorized, exceptions.unauthorized)
+app.add_exception_handler(exceptions.Forbidden, exceptions.forbidden)

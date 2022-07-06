@@ -28,7 +28,7 @@ def get_one_article(
 ):
     article = db_article.get_one_article(db, article_id)
     if article.user_id != current_user.id:
-        raise exceptions.ForbiddenException()
+        raise exceptions.Forbidden()
     return article
 
 
