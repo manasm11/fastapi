@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Request, Response
+from datetime import datetime
+from typing import Optional
+
+from fastapi import APIRouter, Cookie, Header, Response
 from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 
 router = APIRouter(prefix="/product", tags=["Product"])
@@ -32,20 +35,26 @@ products = ["watch", "phone", "laptop"]
         },
     },
 )
-def get_products(request: Request):
-    content_type = request.headers.get("accept", "application/json")
-    responses = {
+def get_products(
+    accept: str = Header("application/json"), last_modified: str = Cookie(None)
+):
+    print(last_modified)
+    media_types = {
         "application/json": lambda: JSONResponse(
             products, media_type="application/json"
         ),
-        "text/plain": lambda: PlainTextResponse(
-            ", ".join(products), media_type="text/plain"
+        "text/csv": lambda: PlainTextResponse(
+            ", ".join(products), media_type="text/csv"
         ),
         "text/html": lambda: HTMLResponse(
             "<h1>" + "</h1><h1>".join(products) + "</h1>", media_type="text/html"
         ),
     }
-    for accept in responses:
-        if accept in content_type:
-            return responses[accept]()
+    response: Optional[Response] = None
+    for type in media_types:
+        if type in accept:
+            response = media_types[type]()
+    if response:
+        response.set_cookie("last_modified", datetime.now().isoformat())
+        return response
     return PlainTextResponse("No content type found", status_code=406)
