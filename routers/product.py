@@ -29,7 +29,7 @@ products = ["watch", "phone", "laptop"]
         },
         406: {
             "description": "No content type found",
-        }
+        },
     },
 )
 def get_products(request: Request):
