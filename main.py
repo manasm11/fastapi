@@ -1,3 +1,4 @@
+import exceptions
 from db import database, models
 from fastapi import FastAPI
 from routers import article, blog_get, blog_post, user
@@ -15,3 +16,8 @@ app.include_router(blog_post.router)
 def test_endpoint():
     """Check if the server is online or not."""
     return {"message": "API is live", "alive": True}
+
+
+app.add_exception_handler(
+    exceptions.UserNotFoundException, exceptions.user_not_found_handler
+)

@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+import exceptions
 from db.models import DbArticle
 from schemas import ArticleRequest
 
@@ -24,11 +25,16 @@ def get_all_articles(db: Session):
 
 def get_one_article(db: Session, id: int):
     article = db.query(DbArticle).get(id)
+    if not article:
+        raise exceptions.ArticleNotFoundException(id)
     return article
 
 
 def update_article(db: Session, id: int, request: ArticleRequest):
     articles = db.query(DbArticle).filter(DbArticle.id == id)
+    article = articles.first()
+    if not article:
+        raise exceptions.ArticleNotFoundException(id)
     articles.update(
         {
             DbArticle.title: request.title,
@@ -38,13 +44,14 @@ def update_article(db: Session, id: int, request: ArticleRequest):
         }
     )
     db.commit()
-    article = articles.first()
     db.refresh(article)
     return article
 
 
 def delete_article(db: Session, id: int):
     article = db.query(DbArticle).get(id)
+    if not article:
+        raise exceptions.ArticleNotFoundException(id)
     db.delete(article)
     db.commit()
     return {"message": f"Article with id {id} deleted"}

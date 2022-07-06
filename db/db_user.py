@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 
+import exceptions
 from db.hash import Hash
 from db.models import DbUser
 from schemas import UserRequest
@@ -23,13 +24,16 @@ def get_all_users(db: Session):
 
 def get_one_user(db: Session, id: int):
     user = db.query(DbUser).get(id)
-    # Handle any exceptions
+    if not user:
+        raise exceptions.UserNotFoundException(id)
     return user
 
 
 def update_user(db: Session, request: UserRequest, id: int):
     users = db.query(DbUser).filter(DbUser.id == id)
-    # Handle any exceptions
+    user = users.first()
+    if not user:
+        raise exceptions.UserNotFoundException(id)
     users.update(
         {
             DbUser.email: request.email,
@@ -38,14 +42,14 @@ def update_user(db: Session, request: UserRequest, id: int):
         }
     )
     db.commit()
-    user = users.first()
     db.refresh(user)
     return user
 
 
 def delete_user(db: Session, id: int):
     user = db.query(DbUser).get(id)
-    # Handle any exceptions
+    if not user:
+        raise exceptions.UserNotFoundException(id)
     db.delete(user)
     db.commit()
     return {"message": f"User with id {id} deleted"}
