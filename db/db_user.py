@@ -2,10 +2,10 @@ from sqlalchemy.orm import Session
 
 from db.hash import Hash
 from db.models import DbUser
-from schemas import UserBase
+from schemas import UserRequest
 
 
-def create_user(db: Session, request: UserBase):
+def create_user(db: Session, request: UserRequest):
     new_user = DbUser(
         username=request.username,
         email=request.email,
@@ -27,7 +27,7 @@ def get_one_user(db: Session, user_id: int):
     return user
 
 
-def update_user(db: Session, request: UserBase, user_id: int):
+def update_user(db: Session, request: UserRequest, user_id: int):
     users = db.query(DbUser).filter(DbUser.id == user_id)
     # Handle any exceptions
     users.update(
