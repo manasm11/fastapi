@@ -22,7 +22,7 @@ def get_all_users(db: Session):
     return db.query(DbUser).all()
 
 
-def get_one_user(db: Session, id: int):
+def get_user(db: Session, id: int):
     user = db.query(DbUser).get(id)
     if not user:
         raise exceptions.UserNotFound(id)
