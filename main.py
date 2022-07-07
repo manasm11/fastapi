@@ -2,6 +2,7 @@ import exceptions
 from auth import authentication
 from db import database, models
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from routers import article, blog_get, blog_post, file, product, user
 
 models.Base.metadata.create_all(database.engine)
@@ -19,6 +20,8 @@ app.include_router(article.router)
 app.include_router(blog_get.router)
 app.include_router(blog_post.router)
 app.include_router(product.router)
+
+app.mount("/files", StaticFiles(directory="files"), name="files")
 
 
 @app.get("/hello")
