@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 from typing import Optional
 
@@ -7,6 +8,10 @@ from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 router = APIRouter(prefix="/product", tags=["Product"])
 
 products = ["watch", "phone", "laptop"]
+
+
+async def time_consuming_function():
+    time.sleep(5)
 
 
 @router.get(
@@ -35,10 +40,10 @@ products = ["watch", "phone", "laptop"]
         },
     },
 )
-def get_products(
+async def get_products(
     accept: str = Header("application/json"), last_modified: str = Cookie(None)
 ):
-    print(last_modified)
+    await time_consuming_function()
     media_types = {
         "application/json": lambda: JSONResponse(
             products, media_type="application/json"
