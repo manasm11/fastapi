@@ -1,7 +1,9 @@
+from time import time
+
 import exceptions
 from auth import authentication
 from db import database, models
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from routers import article, blog_get, blog_post, file, product, user
 from templates import templates
@@ -29,6 +31,15 @@ app.mount(
     StaticFiles(directory="templates/static"),
     name="template-static",
 )
+
+
+@app.middleware("http")
+async def duration_header_middleware(request: Request, call_next):
+    start_time = time()
+    response = await call_next(request)
+    duration_milliseconds = 1000 * (time() - start_time)
+    response.headers["X-Duration"] = f"{duration_milliseconds}ms"
+    return response
 
 
 @app.get("/hello")
