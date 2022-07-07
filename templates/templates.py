@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Request
+import os
+import time
+
+from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from schemas import ProductRequest
@@ -24,3 +27,17 @@ async def post_products(request: Request, product: ProductRequest):
             "price": product.price,
         },
     )
+
+
+def log_request():
+    time.sleep(10)
+    if not os.path.exists("logs/"):
+        os.makedirs("logs/")
+    with open("logs/template-logs.txt", "w") as f:
+        f.write(f"{time.time()}: Request Logged")
+
+
+@router.get("/log-request", tags=["Template"])
+def log_response_in_background(bt: BackgroundTasks):
+    bt.add_task(log_request)
+    return "ok"

@@ -131,3 +131,4 @@ dmypy.json
 *.db
 files/
 coverage.*
+logs/
