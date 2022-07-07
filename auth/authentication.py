@@ -11,7 +11,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 router = APIRouter(tags=["Auth"])
 
 
-@router.post("/token")
+@router.post("/token", status_code=201)
 def get_token(
     request: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
