@@ -19,6 +19,12 @@ class ArticleRequest(BaseModel):
     creator_id: int
 
 
+class ProductRequest(BaseModel):
+    title: str
+    description: str
+    price: float
+
+
 #######################################################
 ###                    RESPONSES                    ###
 #######################################################

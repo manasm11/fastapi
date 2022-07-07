@@ -4,6 +4,7 @@ from db import database, models
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from routers import article, blog_get, blog_post, file, product, user
+from templates import templates
 
 models.Base.metadata.create_all(database.engine)
 
@@ -13,6 +14,7 @@ app = FastAPI()
 #######################################################
 ###                    ROUTES                       ###
 #######################################################
+app.include_router(templates.router)
 app.include_router(file.router)
 app.include_router(authentication.router)
 app.include_router(user.router)
@@ -22,6 +24,11 @@ app.include_router(blog_post.router)
 app.include_router(product.router)
 
 app.mount("/files", StaticFiles(directory="files"), name="files")
+app.mount(
+    "/templates/static",
+    StaticFiles(directory="templates/static"),
+    name="template-static",
+)
 
 
 @app.get("/hello")
